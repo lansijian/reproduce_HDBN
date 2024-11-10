@@ -41,7 +41,7 @@ def calculate_accuracy(label_path, pred_path):
 
 # 定义目标函数
 def f1(rates):
-    label_path = r'data_C\val_label.npy'  # 假设标签文件的路径
+    label_path = r'data\val_label.npy'  # 假设标签文件的路径
     combined_file = load_and_combine_npy(files, rates, output_file) #加载并合并置信度文件
     return -calculate_accuracy(label_path, combined_file)
 
@@ -74,30 +74,41 @@ files = [
     #r'ICMEW2024-Track10-main\Model_inference\Mix_Former\output\V2_BM\BM.npy',
     #r'ICMEW2024-Track10-main\Model_inference\Mix_Former\output\V2_J\J.npy',
     r'ICMEW2024-Track10-main\Model_inference\Mix_Former\output2\output\V2_JM\V2_JM.npy',
+
 ]
-rates = [-1.14570081,  0.73093037,  0.50504466,  0.10773738,
-          0.61150915,  0.53455875, -0.56590946,  0.46124499,
-         -0.06959502,  0.06440321, -0.38478471, -0.0254499,
-          7.02123438, -0.24064246,
-          2.45840128, -1.05865881,  0.81761517,  0.00712087, -0.06325559]
-output_file = 'combined.npy'
+rates=[ 0.25295188 , 0.9906784 , 0.50188838 , -0.01512917 ,
+        0.64582545 , 0.54793991 , -0.62225464 , 0.1760889 ,  #ctrgcn
+        0.00920295 , 0.00805803 , 0.09316419 , -0.03026022 , #mstrgcn
+        6.12391752 , -0.0001     , -1.60516981 ,              #tdgcn
+        2.11799451 ,                                         #TEGCN
+        -0.00777379 ,-0.69977849 ,-0.05539037 ,-0.05393019] #mixformer
+'''
+rates=[ 0.25295188 , 0.95371117 , 0.51420676 , -0.00909629 ,
+        0.65327953 , 0.55331973 , -0.62225464 , 0.46124499 ,
+        0.00920295 , 0.00805803 , 0.00703888 , -0.00831144 ,
+        -0.001, 0.01,0.01,
+        1.317      , -0.00777379 , 0.91497434 , 0.008603,
+        0.01 ]
+'''
+'''
+rates=[ 2.807e-01,9.783e-01,5.178e-01,6.186e-03,
+       6.700e-01,6.053e-01,-5.866e-01,4.614e-01,
+        0.01,0.01,0.01,0.01,
+        1.317e+00,-5.792e-03,9.231e-01,8.603e-03]
+'''
+#rates = [0.44, 1.03, 0.62, 0.009,
+#        0.67, 0.001, 0.001, 0.23,
+        # 0.01, 0.01, 0.0001, 0.0001,
+        # 0.001, 0.001, 0.0001, 0.0001,
+#        0.99, 0.1, 0.95, 0.001]
+output_file = 'combinedA.npy'
 
 if __name__ == "__main__":
     args = parser.parse_args()
-    x = rates
-    result = minimize(f1, x, method='COBYLA')
-    '''
-    最优的参数列表 方法名+rates参数数组
-    #powell 
-    #COBYLA 
-    '''
-    print('Optimization terminated successfully.')
-    print('Success:', result.success)
-    print('Status:', result.status)
-    print('Function value:', result.fun)
-    print('Optimized parameters (x):', result.x)  # 打印优化后的参数列表
-    print('Number of iterations:', result.nit)
-    print('Direction:', result.direc)
-    print('Number of function evaluations:', result.nfev)
+    result = minimize(f1, rates, method='powell')
+    np.set_printoptions(threshold=np.inf)
+    print(result)
     print('---------------------------------')
+
+    print(result.x)
     print('最后的Top1 Acc: {:.5f}%'.format(-f1(result.x)))
