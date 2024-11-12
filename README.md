@@ -4,13 +4,13 @@ https://github.com/lansijian/reproduce_HDBN
 
 均在master中 
 
-使用1：对于TEGCN是直接参照readme进行训练然后用准确度最高的模型得出B的置信度文件
+使用1：对于TEGCN是直接参照readme进行训练然后用准确度最高的模型得出测试集的置信度文件
 
 使用2：对于HDBN则是下面的步骤：
 
 首先对于原来的训练集和测试集进行转化，使用比赛方提供的训练集，然后使用data中的transform_2d.py和transform.py将原来的train、vel与test的npy文件和对应的label文件（test的label是自己创建的全部是0的文件）转化为适合训练集的npz文件，然后再于Mix_GCN中修改config文件夹中对应的训练和测试的文件路径，然后就进行训练，得到每一个训练的pkl文件后，用主文件夹下中的pkl_npy.py将每一个对应的模型转化为对应的置信度文件npy，之后利用主文件夹中的ensemble_npy_eval_A_2.py对置信度文件进行融合的权重分配（PS：我们使用了两个仓库中的置信度文件进行融合，ensemble_npy_eval_A.py是无操作的数据融合，ensemble_npy_eval_A_3.py是基于作者使用的高斯优化的方法得到大概的权重），之后找到最佳的权重分配，用训练得到的最优的模型pt文件测试生成test测试集对应的pkl文件，再同理转换为npy文件，在ensemble_npy_eval_B.py中利用最佳的权重分配对B测试集的置信度文件进行融合得到最终的置信度文件combined.npy，最后修改置信度名字为pred.npy，至此结束。
 
-训练日志和模型权重均在output文件当中，环境配置为mix_GCN.yml中，修改的部分代码已经放在仓库中，训练参数设置均在config中，训练的文件的路径则按照各自的路径进行设置，训练文件为data文件夹 ，运行的方式则参考官方的readme文件，无较大改动。训练的npz文件过大无法上传GitHub仓库需要下载后用data中的python文件进行转化，output（国赛的数据均在output2中）其中含有较大的文件全部进行了压缩，需解压！
+训练日志和模型权重均在output文件当中，环境配置为mix_GCN.yml中，修改的部分代码已经放在仓库中，训练参数设置均在config中，训练的文件的路径则按照各自的路径进行设置，训练文件为data文件夹 ，运行的方式则参考官方的readme文件，无较大改动。训练的npz文件过大无法上传GitHub仓库需要下载后用data中的python文件进行转化，**output2（国赛的数据均在output2中）**其中含有较大的文件全部进行了压缩，需解压！
 
 最终版本采用了单目标优化模型来搜寻最佳的模型融合权重，我们以准确度最大为优化目标，采用powell方法对问题求解，使用的文件和参数如下（注意修改每一个置信度文件的路径）
 ```
@@ -49,6 +49,43 @@ rates=[ 0.25295188 , 0.9906784 , 0.50188838 , -0.01512917 ,
         2.11799451 ,                                         #TEGCN
         -0.00777379 ,-0.69977849 ,-0.05539037 ,-0.05393019] #mixformer
 ```
+
+```
+files = [
+    r'Model_inference\Mix_GCN\output\ctrgcn_V2_B\B.npy',
+    r'Model_inference\Mix_GCN\output\ctrgcn_V2_B_3D\B_3D.npy',
+    r'Model_inference\Mix_GCN\output\ctrgcn_V2_BM\BM.npy',
+    r'Model_inference\Mix_GCN\output\ctrgcn_V2_BM_3D\BM_3D.npy',
+
+    r'Model_inference\Mix_GCN\output\ctrgcn_V2_J\J.npy',
+    r'Model_inference\Mix_GCN\output\ctrgcn_V2_J_3D\J_3D.npy',
+    r'Model_inference\Mix_GCN\output\ctrgcn_V2_JM\JM.npy',
+    r'Model_inference\Mix_GCN\output\ctrgcn_V2_JM_3D\JM_3D.npy',
+
+
+    #r'Model_inference\Mix_GCN\output\mstgcn_V2_B\B.npy',
+    r'Model_inference\Mix_GCN\output\mstgcn_V2_BM\BM.npy',
+    r'Model_inference\Mix_GCN\output\mstgcn_V2_J\J.npy',
+    r'Model_inference\Mix_GCN\output\mstgcn_V2_JM\JM.npy',
+
+    r'Model_inference\Mix_GCN\output\tdgcn_V2_B\B.npy',
+    #r'Model_inference\Mix_GCN\output\tdgcn_V2_BM\BM.npy',
+    r'Model_inference\Mix_GCN\output\tdgcn_V2_J\J.npy',
+    #r'Model_inference\Mix_GCN\output\tdgcn_V2_JM\JM.npy',
+
+    r'TE-GCN\pred.npy',
+    r'Model_inference\Mix_Former\output\V2_B\B.npy',
+    r'Model_inference\Mix_Former\output\V2_K2\K2.npy',
+    r'Model_inference\Mix_Former\output\V2_K2M\K2M.npy',
+    #r'ICMEW2024-Track10-main\Model_inference\Mix_Former\output\V2_K2\K2.npy',
+    r'Model_inference\Mix_Former\output\V2_JM\V2_JM.npy',
+    #r'Model_inference\Mix_Former\output\V2_BM\BM.npy'
+]
+rates=[ 0.24533144 ,0.98529858 ,0.52528801 ,-0.01512917  ,0.64582545  ,0.54781795,
+ -0.62225464  ,0.1760889   ,0.03534935  ,0.06965514 ,-0.07291386  ,6.07546296,
+ -1.63986077  ,2.11220217 ,-0.00777379 ,-0.72594603 ,-0.0592807  ,-0.05676209]
+```
+以上是两版得分最高的权重配置
 
 # ICMEW2024-Track10
 This is the official repo of **HDBN** and our work is one of the **top solutions** in the Multi-Modal Video Reasoning and Analyzing Competition (**MMVRAC**) of **2024 ICME** Grand Challenge **Track10**. <br />
