@@ -15,43 +15,6 @@ https://github.com/lansijian/reproduce_HDBN
 最终版本采用了单目标优化模型来搜寻最佳的模型融合权重，我们以准确度最大为优化目标，采用powell方法对问题求解，使用的文件和参数如下（注意修改每一个置信度文件的路径）
 ```
 files = [
-    r'ICMEW2024-Track10-main\Model_inference\Mix_GCN\output2\output\ctrgcn_V2_B\B.npy',
-    r'ICMEW2024-Track10-main\Model_inference\Mix_GCN\output2\output\ctrgcn_V2_B_3D\B_3D.npy',
-    r'ICMEW2024-Track10-main\Model_inference\Mix_GCN\output2\output\ctrgcn_V2_BM\BM.npy',
-    r'ICMEW2024-Track10-main\Model_inference\Mix_GCN\output2\output\ctrgcn_V2_BM_3D\BM_3D.npy',
-    r'ICMEW2024-Track10-main\Model_inference\Mix_GCN\output2\output\ctrgcn_V2_J\J.npy',
-    r'ICMEW2024-Track10-main\Model_inference\Mix_GCN\output2\output\ctrgcn_V2_J_3D\J_3D.npy',
-    r'ICMEW2024-Track10-main\Model_inference\Mix_GCN\output2\output\ctrgcn_V2_JM\JM.npy',
-    r'ICMEW2024-Track10-main\Model_inference\Mix_GCN\output2\output\ctrgcn_V2_JM_3D\JM_3D.npy',
-    r'ICMEW2024-Track10-main\Model_inference\Mix_GCN\output2\output\mstgcn_V2_B\B.npy',
-    r'ICMEW2024-Track10-main\Model_inference\Mix_GCN\output2\output\mstgcn_V2_BM\BM.npy',
-    r'ICMEW2024-Track10-main\Model_inference\Mix_GCN\output2\output\mstgcn_V2_J\J.npy',
-    r'ICMEW2024-Track10-main\Model_inference\Mix_GCN\output2\output\mstgcn_V2_JM\JM.npy',
-    r'ICMEW2024-Track10-main\Model_inference\Mix_GCN\output2\output\tdgcn_V2_B\B.npy',
-    r'ICMEW2024-Track10-main\Model_inference\Mix_GCN\output2\output\tdgcn_V2_BM\BM.npy',
-    r'ICMEW2024-Track10-main\Model_inference\Mix_GCN\output\tdgcn_V2_J\J.npy',
-    # r'ICMEW2024-Track10-main\Model_inference\Mix_GCN\output\tdgcn_V2_JM\JM.npy'
-    r'TE-GCN-main\work_dir\2995\epoch1_test_score.npy',
-    r'ICMEW2024-Track10-main\Model_inference\Mix_Former\output2\output\V2_B\B.npy',
-    r'ICMEW2024-Track10-main\Model_inference\Mix_Former\output2\output\V2_K2\K2.npy',
-    r'ICMEW2024-Track10-main\Model_inference\Mix_Former\output2\output\V2_K2M\K2M.npy',
-    #r'ICMEW2024-Track10-main\Model_inference\Mix_Former\output\V2_BM\BM.npy',
-    #r'ICMEW2024-Track10-main\Model_inference\Mix_Former\output\V2_J\J.npy',
-    r'ICMEW2024-Track10-main\Model_inference\Mix_Former\output2\output\V2_JM\V2_JM.npy',
-]
-```
-
-```
-rates=[ 0.25295188 , 0.9906784 , 0.50188838 , -0.01512917 ,
-        0.64582545 , 0.54793991 , -0.62225464 , 0.1760889 ,  #ctrgcn
-        0.00920295 , 0.00805803 , 0.09316419 , -0.03026022 , #mstrgcn
-        6.12391752 , -0.0001     , -1.60516981 ,              #tdgcn
-        2.11799451 ,                                         #TEGCN
-        -0.00777379 ,-0.69977849 ,-0.05539037 ,-0.05393019] #mixformer
-```
-
-```
-files = [
     r'Model_inference\Mix_GCN\output\ctrgcn_V2_B\B.npy',
     r'Model_inference\Mix_GCN\output\ctrgcn_V2_B_3D\B_3D.npy',
     r'Model_inference\Mix_GCN\output\ctrgcn_V2_BM\BM.npy',
@@ -81,11 +44,13 @@ files = [
     r'Model_inference\Mix_Former\output\V2_JM\V2_JM.npy',
     #r'Model_inference\Mix_Former\output\V2_BM\BM.npy'
 ]
-rates=[ 0.24533144 ,0.98529858 ,0.52528801 ,-0.01512917  ,0.64582545  ,0.54781795,
- -0.62225464  ,0.1760889   ,0.03534935  ,0.06965514 ,-0.07291386  ,6.07546296,
- -1.63986077  ,2.11220217 ,-0.00777379 ,-0.72594603 ,-0.0592807  ,-0.05676209]
+rates=[ 1.95904134,  1.69738992,  2.47459839,  2.07984952,
+        0.62011856,  0.92379383, -0.36092151,  0.31427626,
+        -0.20529586, -1.03152915,  0.49641643,  0.32438438,
+        0.38528713, -0.00590293, -1.66036885,  2.4853195,  
+        -0.01693589,  1.16815874, -0.1698659,  -0.53143922]
 ```
-以上是两版得分最高的权重配置
+
 
 # ICMEW2024-Track10
 This is the official repo of **HDBN** and our work is one of the **top solutions** in the Multi-Modal Video Reasoning and Analyzing Competition (**MMVRAC**) of **2024 ICME** Grand Challenge **Track10**. <br />
